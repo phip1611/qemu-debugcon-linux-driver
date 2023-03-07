@@ -1,0 +1,14 @@
+name: Build
+
+on: [ push, pull_request ]
+
+jobs:
+  build:
+    name: Build Driver with Nix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: cachix/install-nix-action@v19
+        with:
+          nix_path: nixpkgs=channel:nixos-22.11-small
+      - run: nix-build -A runQemuDemo

@@ -1,0 +1,9 @@
+*.mod
+*.o
+*.cmd
+*.ko
+*.mod.c
+modules.order
+Module.symvers
+*.o.d
+cmake-build*
