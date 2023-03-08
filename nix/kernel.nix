@@ -7,6 +7,7 @@
 # - serial and tty
 # - hypervisor detection support
 # - dynamic module loading
+# - shutdown/poweroff
 #
 # The kernel config itself probably builds with a big variety of Linux kernel
 # configurations. All important drivers are built-in ("=Y"). There are no modules
