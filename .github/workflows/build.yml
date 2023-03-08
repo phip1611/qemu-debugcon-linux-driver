@@ -11,4 +11,9 @@ jobs:
       - uses: cachix/install-nix-action@v19
         with:
           nix_path: nixpkgs=channel:nixos-22.11-small
-      - run: nix-build -A runQemuDemo
+      - name: "Build QEMU demo"
+        run: nix-build -A runQemuDemo
+      - name: "Run QEMU demo"
+        run: timeout -s KILL 10s ./result/bin/run_qemu_demo || true
+      - name: "Verify write to debugcon device was successful"
+        run: "grep 'Hello from User App via /dev/debugcon!' debugcon.txt"

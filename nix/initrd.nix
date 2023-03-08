@@ -5,10 +5,12 @@
 { pkgs
 , lib
 , debugconModule
+, testApp
 }:
 
 let
   debugconKernelMod = "${debugconModule}/lib/modules/6.2.0/extra/debugcon.ko";
+  testAppBin = "${testApp}/bin/test_app";
 in
 pkgs.makeInitrd {
   contents = [{
@@ -19,6 +21,9 @@ pkgs.makeInitrd {
            # Basic shell dependencies
            pkgs.bashInteractive
            pkgs.busybox
+           # If you want, you can add other utilities here.
+           # They might require more kernel features.
+           # pkgs.fd
         ])
       }
 
@@ -28,13 +33,21 @@ pkgs.makeInitrd {
       mount -t tmpfs none /tmp
       mount -t tmpfs none /run
 
+      # Insert the debugcon kernel module.
+      # This is allowed to fail, as otherwise the kernel ends with a panic.
+      # I'm not sure why, tho. This fails, if one changes for example the
+      # Hypervisor ID from QEMU/TCG to KVM.
+      insmod ${debugconKernelMod} || true
+
       # Create device nodes.
       mdev -s
 
-      # Insert the debugcon kernel module.
-      insmod ${debugconKernelMod}
+      echo -n "/dev/debugcon: "
+      ls /dev | grep -q debugcon && echo EXISTS || echo 'NOT FOUND'
 
-      # Enters bash (as the root shell) with job control.
+      ${testAppBin}
+
+      # Enter bash (the root shell)
       setsid cttyhack bash
 
       poweroff -f
