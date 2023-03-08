@@ -20,5 +20,6 @@ writeShellScriptBin "run_qemu_demo" ''
     -initrd ${initrdPath} \
     -serial stdio \
     -debugcon file:debugcon.txt \
+    -display none `# relevant for the CI` \
     -m 512M
 ''
