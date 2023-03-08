@@ -18,5 +18,8 @@ writeShellScriptBin "run_qemu_demo" ''
     -kernel ${kernelPath} \
     -append "console=ttyS0" \
     -initrd ${initrdPath} \
-    -serial stdio
+    -serial stdio \
+    -debugcon file:debugcon.txt \
+    -display none `# relevant for the CI` \
+    -m 512M
 ''
