@@ -59,7 +59,6 @@ struct file_operations fops = {
         .release = device_release
 };
 struct device * device = NULL;
-struct mutex driver_lock;
 
 int device_open(struct inode * ino, struct file * f) {
     int acquired_exclusive_access = 0;
