@@ -18,5 +18,7 @@ writeShellScriptBin "run_qemu_demo" ''
     -kernel ${kernelPath} \
     -append "console=ttyS0" \
     -initrd ${initrdPath} \
-    -serial stdio
+    -serial stdio \
+    -cpu qemu64 \
+    -m 512M
 ''
