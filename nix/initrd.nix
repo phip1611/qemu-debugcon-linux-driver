@@ -34,10 +34,7 @@ pkgs.makeInitrd {
       mount -t tmpfs none /run
 
       # Insert the debugcon kernel module.
-      # This is allowed to fail, as otherwise the kernel ends with a panic.
-      # I'm not sure why, tho. This fails, if one changes for example the
-      # Hypervisor ID from QEMU/TCG to KVM.
-      insmod ${debugconKernelMod} || true
+      insmod ${debugconKernelMod}
 
       # Create device nodes.
       mdev -s
