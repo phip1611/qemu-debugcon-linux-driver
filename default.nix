@@ -1,7 +1,7 @@
 let
   pkgs = (import ./nix/nixpkgs.nix).stable;
   lib = pkgs.lib;
-  gitignoreSource = import ./nix/gitignore.nix;
+  gitignoreSource = import ./nix/gitignore.nix { inherit lib; };
 in
 let
   selectedLinuxKernelPkg = pkgs.linux_6_2;

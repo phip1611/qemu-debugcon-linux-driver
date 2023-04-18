@@ -1,6 +1,8 @@
 # Returns the gitignoreSource function which takes a path and filters it by
 # applying gitignore rules. The result is a filtered file tree in the nix store.
 
+{ lib }:
+
 let
   gitignoreSrc =
     let
@@ -12,6 +14,6 @@ let
       url = "https://github.com/hercules-ci/gitignore.nix/archive/${rev}.tar.gz";
       sha256 = "sha256:07vg2i9va38zbld9abs9lzqblz193vc5wvqd6h7amkmwf66ljcgh";
     };
-  gitignoreNix = import gitignoreSrc { };
+  gitignoreNix = import gitignoreSrc { inherit lib; };
 in
 gitignoreNix.gitignoreSource
