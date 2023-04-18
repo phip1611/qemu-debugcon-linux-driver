@@ -4,7 +4,7 @@
 
 { gitignoreSource
 , lib
-# The Linux kernel Nix package for which this module is compiled.
+  # The Linux kernel Nix package for which this module is compiled.
 , kernel
 , stdenv
 }:

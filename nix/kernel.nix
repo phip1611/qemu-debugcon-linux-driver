@@ -14,7 +14,7 @@
 # build.
 
 { lib
-# the selected Linux kernel from "pkgs.linux_*"
+  # the selected Linux kernel from "pkgs.linux_*"
 , selectedLinuxKernelPkg
 , pkgs
 }:
