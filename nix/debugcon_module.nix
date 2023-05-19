@@ -7,6 +7,8 @@
   # The Linux kernel Nix package for which this module is compiled.
 , kernel
 , stdenv
+, rust-bindgen
+, rustc
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +21,11 @@ stdenv.mkDerivation rec {
     export sourceRoot=$(pwd)/source
   '';
 
-  nativeBuildInputs = kernel.moduleBuildDependencies;
+  nativeBuildInputs = kernel.moduleBuildDependencies
+    ++
+    # Rust-specific module build depenendencies not specified out-of-the-box in Nix.
+    [ rust-bindgen rustc ]
+  ;
 
   makeFlags = kernel.makeFlags ++ [
     "-C"

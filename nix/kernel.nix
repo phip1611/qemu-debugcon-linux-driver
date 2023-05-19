@@ -14,26 +14,28 @@
 # build.
 
 { lib
-  # the selected Linux kernel from "pkgs.linux_*"
-, selectedLinuxKernelPkg
 , pkgs
 }:
 
 let
+  src = builtins.fetchTarball {
+    url = "https://github.com/Rust-for-Linux/linux/archive/refs/heads/rust.tar.gz";
+    sha256 = "sha256:18mxvk1l97448m9s55zc60nlgwb5dnzl1akpz12xyvigc5kz3q7r";
+  };
   # Function that builds a kernel from the provided Linux source with the
   # given config.
-  buildKernel = selectedLinuxKernelPkg: pkgs.linuxKernel.manualConfig {
+  buildKernel = pkgs.linuxKernel.manualConfig {
     inherit (pkgs) stdenv lib;
 
-    src = selectedLinuxKernelPkg.src;
+    inherit src;
     configfile = ./kernel.config;
 
-    version = "${selectedLinuxKernelPkg.version}";
-    # Probably that's a weird nixpkgs upstream thingy. Linux 6.2 wants
-    # "6.2.0" instead of "6.2".
-    modDirVersion = "${selectedLinuxKernelPkg.version}.0";
+    version = "6.3";
+    # Probably that's a weird nixpkgs upstream thingy. Linux 6.3 wants
+    # "6.3.0" instead of "6.3".
+    modDirVersion = "6.3.0";
 
     allowImportFromDerivation = true;
   };
 in
-buildKernel selectedLinuxKernelPkg
+buildKernel
