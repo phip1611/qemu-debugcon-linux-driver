@@ -15,8 +15,8 @@ let
     };
   rust-overlay = import rust-overlay-src;
 
-  stableSrc =
-    let
+  stableSrc = /home/pschuster/dev/nixpkgs;
+  /*let
       # Picked a recent commit from the nixos-22.11-small branch.
       # https://github.com/NixOS/nixpkgs/tree/nixos-22.11-small
       #
@@ -26,7 +26,7 @@ let
     builtins.fetchTarball {
       url = "https://github.com/NixOS/nixpkgs/archive/${rev}.tar.gz";
       sha256 = "sha256:1acllp8yxp1rwncxsxnxl9cwkm97wxfnd6ryclmvll3sa39j9b1z";
-    };
+    };*/
   overlays = [ rust-overlay ];
 in
 {
