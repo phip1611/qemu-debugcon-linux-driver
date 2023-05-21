@@ -47,6 +47,11 @@ let
     modDirVersion = "6.3.0";
 
     allowImportFromDerivation = true;
+
+    extraMakeFlags = [
+      # Helps to detect the output of the rust_is_available.sh script.
+      "V=12"
+    ];
   };
 in
 buildKernel

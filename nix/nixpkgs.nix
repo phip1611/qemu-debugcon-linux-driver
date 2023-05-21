@@ -3,9 +3,6 @@
 let
   rust-overlay-src =
     let
-      # Picked a recent commit from the nixos-22.11-small branch.
-      # https://github.com/NixOS/nixpkgs/tree/nixos-22.11-small
-      #
       # When you change this, also change the sha256 hash!
       rev = "e2ceeaa7f9334c5d732323b6fec363229da4f382";
     in
