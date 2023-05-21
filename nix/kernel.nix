@@ -37,7 +37,9 @@ let
     configfile = ./kernel.config;
 
     # Required so that the kernel activates Rust support. Otherwise, the module won't build.
-    extra-module-build-dependencies = [ rustc rust-bindgen ];
+    # Uses my local Nix fork at the moment
+    # -> https://github.com/NixOS/nixpkgs/pull/232861/files
+    extra-build-dependencies = [ rustc rust-bindgen ];
 
     version = "6.3";
     # Probably that's a weird nixpkgs upstream thingy. Linux 6.3 wants
