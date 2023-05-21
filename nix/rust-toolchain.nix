@@ -3,4 +3,7 @@
 
 # This is the Rust version that the kernel currently expects at my selected
 # revision.
-rust-bin.stable."1.68.2".default
+rust-bin.stable."1.68.2".default.override {
+  # Linux build system cross-compiles the core lib.
+  extensions = [ "rust-src" ];
+}

@@ -25,7 +25,7 @@ let
       rev = "bc22545f38d74473cfef3e9fd65432733435b79f";
     in
     builtins.fetchTarball {
-      url = "https://github.com/Rust-for-Linux/linux/archive/refs/heads/${rev}.tar.gz";
+      url = "https://github.com/Rust-for-Linux/linux/archive/${rev}.tar.gz";
       sha256 = "sha256:18mxvk1l97448m9s55zc60nlgwb5dnzl1akpz12xyvigc5kz3q7r";
     };
   # Function that builds a kernel from the provided Linux source with the
