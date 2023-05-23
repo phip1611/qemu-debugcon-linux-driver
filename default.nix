@@ -1,19 +1,26 @@
 let
-  pkgs = (import ./nix/nixpkgs.nix).stable;
+  sources = import ./nix/sources.nix;
+  # pkgsSrc = import sources.nixpkgs-unstable;
+  pkgsSrc = /home/pschuster/dev/nixpkgs;
+  pkgs = import pkgsSrc { overlays = [ (import sources.rust-overlay) ]; };
   lib = pkgs.lib;
-  gitignoreSource = import ./nix/gitignore.nix { inherit lib; };
+
   rust-toolchain = import ./nix/rust-toolchain.nix { inherit (pkgs) rust-bin; };
-  rust-bindgen = import ./nix/rust-bindgen.nix;
+  # rust-bindgen at a proper version
+  rust-bindgen = (import sources.bindgen-nixpkgs { }).rust-bindgen;
+  # The gitignoreSource function which takes a path and filters it by applying
+  # gitignore rules. The result is a filtered file tree in the nix store.
+  gitignoreSource = (import sources."gitignore.nix" { inherit lib; }).gitignoreSource;
 in
 rec {
   kernel = pkgs.callPackage ./nix/kernel.nix {
     inherit rust-bindgen;
+    linuxSrc = sources.rust-for-linux;
     rustc = rust-toolchain;
   };
   debugconModule = pkgs.callPackage ./nix/debugcon_module.nix {
     inherit gitignoreSource;
     inherit kernel;
-    inherit rust-bindgen;
     rustc = rust-toolchain;
   };
   testApp = pkgs.callPackage ./nix/test_app.nix { };

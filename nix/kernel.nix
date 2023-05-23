@@ -13,45 +13,40 @@
 # configurations. All important drivers are built-in ("=Y"). There are no modules
 # build.
 
-{ lib
-, pkgs
+{ pkgs
+, lib
 , rustc
 , rust-bindgen
+, linuxSrc
 }:
 
 let
-  src =
-    let
-      rev = "bc22545f38d74473cfef3e9fd65432733435b79f";
-    in
-    builtins.fetchTarball {
-      url = "https://github.com/Rust-for-Linux/linux/archive/${rev}.tar.gz";
-      sha256 = "sha256:18mxvk1l97448m9s55zc60nlgwb5dnzl1akpz12xyvigc5kz3q7r";
-    };
   # Function that builds a kernel from the provided Linux source with the
   # given config.
-  buildKernel = pkgs.linuxKernel.manualConfig {
-    inherit (pkgs) stdenv lib;
+  buildKernel = pkgs.linuxKernel.manualConfig.override
+    # Pass in very specific versions of these packages and do not use the
+    # default one of the corresponding nixpkgs collection.
+    {
+      inherit rust-bindgen;
+      inherit rustc;
+    }
+    {
+      inherit (pkgs) stdenv lib;
 
-    inherit src;
-    configfile = ./kernel.config;
+      src = linuxSrc;
+      configfile = ./kernel.config;
 
-    # Required so that the kernel activates Rust support. Otherwise, the module won't build.
-    # Uses my local Nix fork at the moment
-    # -> https://github.com/NixOS/nixpkgs/pull/232861/files
-    extra-build-dependencies = [ rustc rust-bindgen ];
+      version = "6.3";
+      # Probably that's a weird nixpkgs upstream thingy. Linux 6.3 wants
+      # "6.3.0" instead of "6.3".
+      modDirVersion = "6.3.0";
 
-    version = "6.3";
-    # Probably that's a weird nixpkgs upstream thingy. Linux 6.3 wants
-    # "6.3.0" instead of "6.3".
-    modDirVersion = "6.3.0";
+      allowImportFromDerivation = true;
 
-    allowImportFromDerivation = true;
-
-    extraMakeFlags = [
-      # Helps to detect the output of the rust_is_available.sh script.
-      "V=12"
-    ];
-  };
+      extraMakeFlags = [
+        # Helps to detect the output of the rust_is_available.sh script.
+        "V=12"
+      ];
+    };
 in
 buildKernel
