@@ -16,7 +16,6 @@
 { pkgs
 , lib
 , rustc
-, rust-bindgen
 , linuxSrc
 }:
 
@@ -24,10 +23,7 @@ let
   # Function that builds a kernel from the provided Linux source with the
   # given config.
   buildKernel = pkgs.linuxKernel.manualConfig.override
-    # Pass in very specific versions of these packages and do not use the
-    # default one of the corresponding nixpkgs collection.
     {
-      inherit rust-bindgen;
       inherit rustc;
     }
     {

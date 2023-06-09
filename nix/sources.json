@@ -1,16 +1,4 @@
 {
-    "bindgen-nixpkgs": {
-        "branch": "master",
-        "description": "nixpkgs with the specific version of rust-bindgen",
-        "homepage": "",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "bedabfbcef9285804729aa78f933d8ceb4897ecf",
-        "sha256": "0vq6rn7imdqvbhg8n0xs5fjcfjr5a5ib1z41kwf55jw367lfqswq",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/bedabfbcef9285804729aa78f933d8ceb4897ecf.tar.gz",
-        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
-    },
     "gitignore.nix": {
         "branch": "master",
         "description": "Nix functions for filtering local git sources",
@@ -24,15 +12,15 @@
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "nixpkgs": {
-        "branch": "master",
+        "branch": "rust-for-linux",
         "description": "Nix Packages collection",
         "homepage": "",
-        "owner": "NixOS",
+        "owner": "yu-re-ka",
         "repo": "nixpkgs",
-        "rev": "26a9467de9933d2dc8f983c75b2d3f2cd2342a0f",
-        "sha256": "097i83hgw6i8b83y6sgz8lbja92g2j3w665v0cqdvhqp5sk6d55j",
+        "rev": "11f5a9060cfeb8446914b93b983cb9ffed6aef6b",
+        "sha256": "10cgnyjl9jl7zrvxizig1x2cxjh3hmvy1wxjn2y9pacm5iaiq29f",
         "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/26a9467de9933d2dc8f983c75b2d3f2cd2342a0f.tar.gz",
+        "url": "https://github.com/yu-re-ka/nixpkgs/archive/11f5a9060cfeb8446914b93b983cb9ffed6aef6b.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     },
     "rust-for-linux": {
@@ -53,10 +41,10 @@
         "homepage": "",
         "owner": "oxalica",
         "repo": "rust-overlay",
-        "rev": "f526dfe586195f56ba215201f42d05beb965136d",
-        "sha256": "0k6l28d771f9ll92jbqjmf9fyd60xzp3wc7di09mfiy3l1zvpj1w",
+        "rev": "f46177d472fc5b754fd5ad382ae8a31a10979750",
+        "sha256": "0asawq9dxfwp6br9q7zmsr9aiz75spz9yv2i988fgwfd4lz3qjif",
         "type": "tarball",
-        "url": "https://github.com/oxalica/rust-overlay/archive/f526dfe586195f56ba215201f42d05beb965136d.tar.gz",
+        "url": "https://github.com/oxalica/rust-overlay/archive/f46177d472fc5b754fd5ad382ae8a31a10979750.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }
