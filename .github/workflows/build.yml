@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: cachix/install-nix-action@v19
+      - uses: DeterminateSystems/magic-nix-cache-action@main
       - name: "Build QEMU demo"
         run: nix-build -A runQemuDemo
       - name: "Run QEMU demo"
