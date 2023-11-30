@@ -1,19 +1,26 @@
 let
-  pkgs = (import ./nix/nixpkgs.nix).stable;
+  sources = import ./nix/sources.nix;
+  # pkgsSrc = /home/pschuster/dev/nixpkgs;
+  pkgs = import sources.nixpkgs { overlays = [ (import sources.rust-overlay) ]; };
   lib = pkgs.lib;
-  gitignoreSource = import ./nix/gitignore.nix { inherit lib; };
+
+  rust-toolchain = import ./nix/rust-toolchain.nix { inherit (pkgs) rust-bin; };
+  # The gitignoreSource function which takes a path and filters it by applying
+  # gitignore rules. The result is a filtered file tree in the nix store.
+  gitignoreSource = (import sources."gitignore.nix" { inherit lib; }).gitignoreSource;
 in
-let
-  selectedLinuxKernelPkg = pkgs.linux_6_2;
-  kernel = pkgs.callPackage ./nix/kernel.nix { inherit selectedLinuxKernelPkg; };
-  debugconModule = pkgs.callPackage ./nix/debugcon_module.nix { inherit gitignoreSource; inherit kernel; };
+rec {
+  kernel = pkgs.callPackage ./nix/kernel.nix {
+    linuxSrc = sources.rust-for-linux;
+    # linuxSrc = /home/pschuster/dev/linux-rust;
+    rustc = rust-toolchain;
+  };
+  debugconModule = pkgs.callPackage ./nix/debugcon_module.nix {
+    inherit gitignoreSource;
+    inherit kernel;
+    rustc = rust-toolchain;
+  };
   testApp = pkgs.callPackage ./nix/test_app.nix { };
   initrd = pkgs.callPackage ./nix/initrd.nix { inherit debugconModule; inherit testApp; };
   runQemuDemo = pkgs.callPackage ./nix/run_qemu_demo.nix { inherit initrd kernel; };
-in
-{
-  inherit debugconModule;
-  inherit runQemuDemo;
-  inherit kernel;
-  inherit initrd;
 }

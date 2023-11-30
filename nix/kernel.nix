@@ -13,27 +13,36 @@
 # configurations. All important drivers are built-in ("=Y"). There are no modules
 # build.
 
-{ lib
-  # the selected Linux kernel from "pkgs.linux_*"
-, selectedLinuxKernelPkg
-, pkgs
+{ pkgs
+, lib
+, rustc
+, linuxSrc
 }:
 
 let
   # Function that builds a kernel from the provided Linux source with the
   # given config.
-  buildKernel = selectedLinuxKernelPkg: pkgs.linuxKernel.manualConfig {
-    inherit (pkgs) stdenv lib;
+  buildKernel = pkgs.linuxKernel.manualConfig.override
+    {
+      inherit rustc;
+    }
+    {
+      inherit (pkgs) stdenv lib;
 
-    src = selectedLinuxKernelPkg.src;
-    configfile = ./kernel.config;
+      src = linuxSrc;
+      configfile = ./kernel.config;
 
-    version = "${selectedLinuxKernelPkg.version}";
-    # Probably that's a weird nixpkgs upstream thingy. Linux 6.2 wants
-    # "6.2.0" instead of "6.2".
-    modDirVersion = "${selectedLinuxKernelPkg.version}.0";
+      version = "6.3";
+      # Probably that's a weird nixpkgs upstream thingy. Linux 6.3 wants
+      # "6.3.0" instead of "6.3".
+      modDirVersion = "6.3.0";
 
-    allowImportFromDerivation = true;
-  };
+      allowImportFromDerivation = true;
+
+      extraMakeFlags = [
+        # Helps to detect the output of the rust_is_available.sh script.
+        "V=12"
+      ];
+    };
 in
-buildKernel selectedLinuxKernelPkg
+buildKernel
