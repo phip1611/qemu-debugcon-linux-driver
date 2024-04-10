@@ -43,7 +43,7 @@ pkgs.makeInitrd {
       echo -n "/dev/debugcon: "
       ls /dev | grep -q debugcon && echo EXISTS || echo 'NOT FOUND'
 
-      # ${testAppBin}
+      ${testAppBin}
 
       # Enter bash (the root shell)
       setsid cttyhack bash

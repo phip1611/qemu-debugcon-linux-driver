@@ -7,7 +7,7 @@
 , kernel  # The Linux kernel Nix package for which this module is compiled.
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "linux-debugcon-driver";
   version = "0.0.0-dev";
 
