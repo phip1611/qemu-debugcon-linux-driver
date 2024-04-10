@@ -4,7 +4,7 @@
 
 { kernel
 , initrd
-, writeShellScriptBin
+, writeShellScript
 , qemu
 }:
 
@@ -13,7 +13,7 @@ let
   initrdPath = "${initrd}/initrd.gz";
   qemuBin = "${qemu}/bin/qemu-system-x86_64";
 in
-writeShellScriptBin "run_qemu_demo" ''
+writeShellScript "run_qemu_demo" ''
   ${qemuBin} \
     -kernel ${kernelPath} \
     -append "console=ttyS0" \

@@ -28,11 +28,11 @@ let
     src = selectedLinuxKernelPkg.src;
     configfile = ./kernel.config;
 
-    version = "${selectedLinuxKernelPkg.version}";
-    # Probably that's a weird nixpkgs upstream thingy. Linux 6.2 wants
-    # "6.2.0" instead of "6.2".
-    modDirVersion = "${selectedLinuxKernelPkg.version}.0";
+    version = selectedLinuxKernelPkg.version;
+    modDirVersion = selectedLinuxKernelPkg.version;
 
+    # Property comes from `manualConfig.nix` in nixpkgs and allows the read
+    # `configfile` from within the derivation.
     allowImportFromDerivation = true;
   };
 in

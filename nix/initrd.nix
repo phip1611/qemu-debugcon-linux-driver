@@ -9,7 +9,7 @@
 }:
 
 let
-  debugconKernelMod = "${debugconModule}/lib/modules/6.2.0/extra/debugcon.ko";
+  debugconKernelMod = "${debugconModule}/lib/modules/${debugconModule.kernel-version}/extra/debugcon.ko";
   testAppBin = "${testApp}/bin/test_app";
 in
 pkgs.makeInitrd {
@@ -24,6 +24,7 @@ pkgs.makeInitrd {
            # If you want, you can add other utilities here.
            # They might require more kernel features.
            # pkgs.fd
+           pkgs.usbutils
         ])
       }
 
@@ -42,7 +43,7 @@ pkgs.makeInitrd {
       echo -n "/dev/debugcon: "
       ls /dev | grep -q debugcon && echo EXISTS || echo 'NOT FOUND'
 
-      ${testAppBin}
+      # ${testAppBin}
 
       # Enter bash (the root shell)
       setsid cttyhack bash
