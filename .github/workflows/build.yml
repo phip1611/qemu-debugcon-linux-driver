@@ -1,18 +1,18 @@
 name: Build
 
-on: [ push, pull_request ]
+on: [ push, pull_request, merge_group ]
 
 jobs:
   build:
     name: Build Driver with Nix
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: cachix/install-nix-action@v19
-      - uses: DeterminateSystems/magic-nix-cache-action@main
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v26
+      - uses: DeterminateSystems/magic-nix-cache-action@v4
       - name: "Build QEMU demo"
         run: nix-build -A runQemuDemo
       - name: "Run QEMU demo"
-        run: timeout -s KILL 10s ./result/bin/run_qemu_demo || true
+        run: timeout -s KILL 10s ./result || true
       - name: "Verify write to debugcon device was successful"
         run: "grep 'Hello from User App via /dev/debugcon!' debugcon.txt"

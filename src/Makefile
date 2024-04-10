@@ -1,16 +1,34 @@
-# Out-of-tree build of the debugcon QEMU driver.
-# This Makefile works for example on Debian-based systems but not
-# in a Nix derivation or on NixOS out of the box. Hence, it takes
-# magic in the Nix derivation.
+# Out of the box, the build with this Makefile only works in FHS environments,
+# such as on Ubuntu or Debian. On NixOS, you either need to open an FHS
+# environment using a Nix shell or build this from a specially crafter Nix
+# derivation.
+#
+# This file follows the conventions written down here:
+# https://docs.kernel.org/kbuild/modules.html
 
-default: driver
+# Make it possible to override the kernel src tree location from Nix derivation.
+KERNEL ?= $(shell uname -r)
+KERNELDIR ?= /lib/modules/$(KERNEL)/build/
 
+.PHONY: default
+default: modules
+
+# -m: Build as module.
 obj-m = debugcon.o
 
-.PHONY: clean default driver
+.PHONY: modules
+modules:
+	@#"M=": Module source. Special variable of the kernel's main Makefile.
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules
 
-driver:
-	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules
+.PHONY: modules_install
+modules_install:
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) modules_install
 
+.PHONY: clean
 clean:
-	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) clean
+
+.PHONY: help
+help:
+	$(MAKE) -C $(KERNELDIR) M=$(PWD) help

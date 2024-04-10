@@ -1,38 +1,37 @@
-# Nix-build for the out-of-tree Linux driver. I used
-# https://github.com/NixOS/nixpkgs/blob/b2aeb9072b698553c2332e6bd6128eb0dce5e9ee/pkgs/os-specific/linux/hid-nintendo/default.nix
-# as template.
+# Derivation for the out-of-tree build of the Linux driver.
 
-{ gitignoreSource
-, lib
-  # The Linux kernel Nix package for which this module is compiled.
-, kernel
+{ lib
+, nix-gitignore
 , stdenv
+
+, kernel  # The Linux kernel Nix package for which this module is compiled.
 }:
 
-stdenv.mkDerivation rec {
-  pname = "qemu-debugcon-driver";
-  version = "0.1";
+stdenv.mkDerivation {
+  pname = "linux-debugcon-driver";
+  version = "0.0.0-dev";
 
-  src = gitignoreSource ../src;
-
-  setSourceRoot = ''
-    export sourceRoot=$(pwd)/source
-  '';
+  src = nix-gitignore.gitignoreSource [ ] ../src;
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
+  passthru = {
+    # The kernel used to build the attribute.
+    kernel-version = kernel.version;
+  };
+
   makeFlags = kernel.makeFlags ++ [
-    "-C"
-    "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(sourceRoot)"
+    # Variable refers to the local Makefile.
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    # Variable of the Linux src tree's main Makefile.
+    "INSTALL_MOD_PATH=$(out)"
   ];
 
   buildFlags = [ "modules" ];
-  installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
   meta = with lib; {
-    description = "A QEMU Debugcon Driver for Linux";
+    description = "A Linux Driver for the debugcon device (available in QEMU or Cloud Hypervisor)";
     platforms = platforms.linux;
   };
 }

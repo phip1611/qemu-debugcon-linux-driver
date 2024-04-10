@@ -1,4 +1,4 @@
-/* Copyright 2023 Philipp Schuster
+/* Copyright 2024 Philipp Schuster <phip1611@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -19,9 +19,9 @@
  */
 // ##################################################################################################
 /*
- * This is a driver for the QEMU debugcon device. It provides the /dev/debugcon
- * device that can be acquired exclusively by user applications for write
- * operations.
+ * This is a driver for the debugcon device present in QEMU or Cloud Hypervisor.
+ * It provides the /dev/debugcon character device that can be acquired
+ * exclusively by user applications to write data to the VMM.
  */
 
 // basic definitions for kernel module development
@@ -37,8 +37,9 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Philipp Schuster <phip1611@gmail.com>");
 MODULE_DESCRIPTION(
-"Linux driver that registers a /dev/debugcon node for the QEMU Debugcon device. "
-"This only works on x86 and when running inside a QEMU VM."
+"Linux driver that registers a /dev/debugcon node for the Debugcon device. "
+"This only works on x86 and when running inside VM that provides that device,"
+"such as QEMU or Cloud Hypervisor."
 );
 
 // with this redefinition we can easily prefix all log messages from pr_* logging macros
@@ -168,7 +169,7 @@ static int __init debugcon_module_init(void) {
 
     dev_major = MAJOR(dev_num);
 
-    debugcon_class = class_create(THIS_MODULE, "debugcon");
+    debugcon_class = class_create("debugcon");
     if (IS_ERR(debugcon_class)) {
         rc = PTR_ERR(debugcon_class);
         pr_err("Failed to create driver class\n");
@@ -195,7 +196,7 @@ static int __init debugcon_module_init(void) {
         goto end;
     }
 
-    pr_info("QEMU Debugcon Driver inserted: /dev/debugcon available\n");
+    pr_info("Debugcon Driver inserted: /dev/debugcon available\n");
 
   end:
     return rc;
@@ -210,7 +211,7 @@ static void __exit debugcon_module_exit(void) {
     class_destroy(debugcon_class);
     cdev_del(&chrdev);
     unregister_chrdev_region(dev_num, CHR_DEV_COUNT);
-    pr_info("QEMU Debugcon Driver unloaded.\n");
+    pr_info("Debugcon driver unloaded.\n");
 }
 
 module_init(debugcon_module_init);

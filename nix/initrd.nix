@@ -9,7 +9,7 @@
 }:
 
 let
-  debugconKernelMod = "${debugconModule}/lib/modules/6.2.0/extra/debugcon.ko";
+  debugconKernelMod = "${debugconModule}/lib/modules/${debugconModule.kernel-version}/updates/debugcon.ko";
   testAppBin = "${testApp}/bin/test_app";
 in
 pkgs.makeInitrd {
@@ -24,6 +24,7 @@ pkgs.makeInitrd {
            # If you want, you can add other utilities here.
            # They might require more kernel features.
            # pkgs.fd
+           pkgs.usbutils
         ])
       }
 

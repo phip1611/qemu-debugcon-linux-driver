@@ -1,31 +1,42 @@
-# A Linux out-of-tree Kernel module for the QEMU debugcon device
+# A Linux out-of-tree Kernel module for the debugcon device
 
-This repository contains an out-of-tree Linux kernel driver for the QEMU
-[debugcon device](https://phip1611.de/blog/how-to-use-qemus-debugcon-feature-and-write-to-a-file/).
-It only works on x86, as it requires I/O ports.
+This repository contains an out-of-tree Linux kernel driver for the
+[debugcon (Debug console) device](https://phip1611.de/blog/how-to-use-qemus-debugcon-feature-and-write-to-a-file/),
+which is present in the VMMs
+[QEMU](https://github.com/qemu/qemu/blob/master/hw/char/debugcon.c) and
+[Cloud Hypervisor)(https://github.com/cloud-hypervisor/cloud-hypervisor/blob/main/devices/src/debug_console.rs)
+(as of >= v38.0). The driver only works on x86, as it needs I/O ports to access
+the device.
 
-The driver will provide a `/dev/debugcon` device. One process at a time can
-open the device file and write bytes to it. Depending on the configuration of
-QEMU, the output will land in the configured location.
+The build process of the driver follows the
+[recommended guidelines](https://docs.kernel.org/kbuild/modules.html).
+
+The driver will provide a character-device file in `/dev/debugcon`. One process
+at a time can open the device file and write bytes to it. Depending on the
+configuration of QEMU, the output will land in the configured location.
 
 The driver is packaged in [Nix](https://nixos.org/), which allows an easy build
 setup. Although the driver can be built the regular way, it is recommended to
 use Nix.
 
 ## Build and Run Demo with Nix
-By using the `$ nix-build -A runQemuDemo` command, you get a shell script in
+
+By using the `$ nix-build -A runQemuDemoBin` command, you get a shell script in
 `./result/bin/run_qemu_demo` that starts a QEMU VM with a minimal Linux kernel
 and initrd, that automatically loads the out-of-tree debugcon kernel module at
 runtime. Once you are in the VM shell, can write to the device like this:
-`echo "foo" > /dev/debugcon`. All output will land in `./debugcon.txt`.
+`echo "foo" > /dev/debugcon`. By default, the VMM will redirect all output to
+`./debugcon.txt`.
 
 ### TL;DR
-- `$ nix-build -A runQemuDemo && ./result/bin/run_qemu_demo`
+
+- `$ nix-build -A runQemuDemo && ./result`
 - (once the prompt of the VM appears) `# echo "foo" > /dev/debugcon`
-- `$ cat debugcon.txt` (on the host) will show you what was written to the
+- (on the host) `$ cat debugcon.txt` will show what was written to the
   device
 
 ## Build Kernel Module for Your System
+
 To build the kernel module for your system (without Nix), you can enter the
 `src` directory and type `$ make`. Ensure that you have installed all relevant
 packages for your system that are needed to build a Linux kernel (module).
