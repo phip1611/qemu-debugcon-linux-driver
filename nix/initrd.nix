@@ -9,7 +9,7 @@
 }:
 
 let
-  debugconKernelMod = "${debugconModule}/lib/modules/${debugconModule.kernel-version}/extra/debugcon.ko";
+  debugconKernelMod = "${debugconModule}/lib/modules/${debugconModule.kernel-version}/updates/debugcon.ko";
   testAppBin = "${testApp}/bin/test_app";
 in
 pkgs.makeInitrd {
