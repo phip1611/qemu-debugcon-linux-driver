@@ -2,8 +2,11 @@
 
 This repository contains an out-of-tree Linux kernel driver for the
 [debugcon (Debug console) device](https://phip1611.de/blog/how-to-use-qemus-debugcon-feature-and-write-to-a-file/),
-which is present in QEMU or Cloud Hypervisor (as of >= v38.0).
-The driver only works on x86, as it needs I/O ports to access the device.
+which is present in the VMMs
+[QEMU](https://github.com/qemu/qemu/blob/master/hw/char/debugcon.c) and
+[Cloud Hypervisor)(https://github.com/cloud-hypervisor/cloud-hypervisor/blob/main/devices/src/debug_console.rs)
+(as of >= v38.0). The driver only works on x86, as it needs I/O ports to access
+the device.
 
 The build process of the driver follows the
 [recommended guidelines](https://docs.kernel.org/kbuild/modules.html).

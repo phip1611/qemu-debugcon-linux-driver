@@ -1,4 +1,4 @@
-/* Copyright 2023 Philipp Schuster
+/* Copyright 2024 Philipp Schuster <phip1611@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in the
@@ -19,9 +19,9 @@
  */
 // ##################################################################################################
 /*
- * This is a driver for the QEMU debugcon device. It provides the /dev/debugcon
- * device that can be acquired exclusively by user applications for write
- * operations.
+ * This is a driver for the debugcon device present in QEMU or Cloud Hypervisor.
+ * It provides the /dev/debugcon character device that can be acquired
+ * exclusively by user applications to write data to the VMM.
  */
 
 // basic definitions for kernel module development
@@ -168,7 +168,7 @@ static int __init debugcon_module_init(void) {
 
     dev_major = MAJOR(dev_num);
 
-    debugcon_class = class_create(THIS_MODULE, "debugcon");
+    debugcon_class = class_create("debugcon");
     if (IS_ERR(debugcon_class)) {
         rc = PTR_ERR(debugcon_class);
         pr_err("Failed to create driver class\n");
