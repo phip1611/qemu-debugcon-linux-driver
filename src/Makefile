@@ -1,6 +1,6 @@
 # Out of the box, the build with this Makefile only works in FHS environments,
 # such as on Ubuntu or Debian. On NixOS, you either need to open an FHS
-# environment using a Nix shell or build this from a specially crafter Nix
+# environment using a Nix shell or build this from a specially crafted Nix
 # derivation.
 #
 # This file follows the conventions written down here:
